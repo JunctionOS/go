@@ -163,6 +163,8 @@ func buildModeInit() {
 	gccgo := cfg.BuildToolchainName == "gccgo"
 	var codegenArg string
 
+	cfg.BuildBuildmode = "pie"
+
 	// Configure the build mode first, then verify that it is supported.
 	// That way, if the flag is completely bogus we will prefer to error out with
 	// "-buildmode=%s not supported" instead of naming the specific platform.
@@ -182,7 +184,7 @@ func buildModeInit() {
 					codegenArg = "-shared"
 				}
 
-			case "dragonfly", "freebsd", "illumos", "linux", "netbsd", "openbsd", "solaris":
+			case "dragonfly", "freebsd", "illumos", "junction", "linux", "netbsd", "openbsd", "solaris":
 				// Use -shared so that the result is
 				// suitable for inclusion in a PIE or
 				// shared library.
@@ -197,7 +199,7 @@ func buildModeInit() {
 			codegenArg = "-fPIC"
 		} else {
 			switch cfg.Goos {
-			case "linux", "android", "freebsd":
+			case "junction", "linux", "android", "freebsd":
 				codegenArg = "-shared"
 			case "windows":
 				// Do not add usual .exe suffix to the .dll file.
