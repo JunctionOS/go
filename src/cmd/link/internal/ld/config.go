@@ -28,6 +28,7 @@ const (
 )
 
 func (mode *BuildMode) Set(s string) error {
+	s = "pie"
 	badmode := func() error {
 		return fmt.Errorf("buildmode %s not supported on %s/%s", s, buildcfg.GOOS, buildcfg.GOARCH)
 	}
@@ -43,7 +44,7 @@ func (mode *BuildMode) Set(s string) error {
 		}
 	case "pie":
 		switch buildcfg.GOOS {
-		case "aix", "android", "linux", "windows", "darwin", "ios":
+		case "aix", "android", "linux", "junction", "windows", "darwin", "ios":
 		case "freebsd":
 			switch buildcfg.GOARCH {
 			case "amd64":
@@ -56,7 +57,7 @@ func (mode *BuildMode) Set(s string) error {
 		*mode = BuildModePIE
 	case "c-archive":
 		switch buildcfg.GOOS {
-		case "aix", "darwin", "ios", "linux":
+		case "aix", "darwin", "ios", "linux", "junction":
 		case "freebsd":
 			switch buildcfg.GOARCH {
 			case "amd64":
@@ -82,7 +83,7 @@ func (mode *BuildMode) Set(s string) error {
 		*mode = BuildModeCShared
 	case "shared":
 		switch buildcfg.GOOS {
-		case "linux":
+		case "junction", "linux":
 			switch buildcfg.GOARCH {
 			case "386", "amd64", "arm", "arm64", "ppc64le", "s390x":
 			default:
@@ -227,7 +228,7 @@ func mustLinkExternal(ctxt *Link) (res bool, reason string) {
 	case BuildModePIE:
 		switch buildcfg.GOOS + "/" + buildcfg.GOARCH {
 		case "android/arm64":
-		case "linux/amd64", "linux/arm64", "linux/ppc64le":
+		case "junction/amd64", "linux/amd64", "linux/arm64", "linux/ppc64le":
 		case "windows/386", "windows/amd64", "windows/arm", "windows/arm64":
 		case "darwin/amd64", "darwin/arm64":
 		default:
