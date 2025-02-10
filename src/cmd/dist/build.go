@@ -90,6 +90,7 @@ var okgoos = []string{
 	"js",
 	"wasip1",
 	"linux",
+	"junction",
 	"android",
 	"solaris",
 	"freebsd",
@@ -1021,6 +1022,7 @@ var unixOS = map[string]bool{
 	"illumos":   true,
 	"ios":       true,
 	"linux":     true,
+	"junction":  true,
 	"netbsd":    true,
 	"openbsd":   true,
 	"solaris":   true,
@@ -1031,6 +1033,8 @@ func matchtag(tag string) bool {
 	switch tag {
 	case "gc", "cmd_go_bootstrap", "go1.1":
 		return true
+	case "junction":
+		return goos == "junction"
 	case "linux":
 		return goos == "linux" || goos == "android"
 	case "solaris":
@@ -1702,6 +1706,7 @@ var cgoEnabled = map[string]bool{
 	"illumos/amd64":   true,
 	"linux/386":       true,
 	"linux/amd64":     true,
+	"junction/amd64":  true,
 	"linux/arm":       true,
 	"linux/arm64":     true,
 	"linux/loong64":   true,

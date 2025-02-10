@@ -19,6 +19,7 @@ var knownOS = map[string]bool{
 	"illumos":   true,
 	"ios":       true,
 	"js":        true,
+	"junction":  true,
 	"linux":     true,
 	"nacl":      true,
 	"netbsd":    true,
@@ -46,6 +47,7 @@ var unixOS = map[string]bool{
 	"netbsd":    true,
 	"openbsd":   true,
 	"solaris":   true,
+	"junction":  true,
 }
 
 // knownArch is the list of past, present, and future known GOARCH values.
