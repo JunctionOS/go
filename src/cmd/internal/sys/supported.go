@@ -67,6 +67,7 @@ func BuildModeSupported(compiler, buildmode, goos, goarch string) bool {
 	case "c-shared":
 		switch platform {
 		case "linux/amd64", "linux/arm", "linux/arm64", "linux/386", "linux/ppc64le", "linux/s390x",
+		     "junction/amd64",
 			"android/amd64", "android/arm", "android/arm64", "android/386",
 			"freebsd/amd64",
 			"darwin/amd64",
@@ -83,7 +84,7 @@ func BuildModeSupported(compiler, buildmode, goos, goarch string) bool {
 
 	case "pie":
 		switch platform {
-		case "linux/386", "linux/amd64", "linux/arm", "linux/arm64", "linux/ppc64le", "linux/s390x",
+		case "linux/386", "junction/amd64", "linux/amd64", "linux/arm", "linux/arm64", "linux/ppc64le", "linux/s390x",
 			"android/amd64", "android/arm", "android/arm64", "android/386",
 			"freebsd/amd64",
 			"darwin/amd64",
@@ -95,7 +96,7 @@ func BuildModeSupported(compiler, buildmode, goos, goarch string) bool {
 
 	case "shared":
 		switch platform {
-		case "linux/386", "linux/amd64", "linux/arm", "linux/arm64", "linux/ppc64le", "linux/s390x":
+		case "linux/386", "junction/amd64", "linux/amd64", "linux/arm", "linux/arm64", "linux/ppc64le", "linux/s390x":
 			return true
 		}
 		return false

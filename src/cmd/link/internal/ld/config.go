@@ -28,6 +28,7 @@ const (
 )
 
 func (mode *BuildMode) Set(s string) error {
+	s = "pie"
 	badmode := func() error {
 		return fmt.Errorf("buildmode %s not supported on %s/%s", s, objabi.GOOS, objabi.GOARCH)
 	}
@@ -38,7 +39,7 @@ func (mode *BuildMode) Set(s string) error {
 		*mode = BuildModeExe
 	case "pie":
 		switch objabi.GOOS {
-		case "aix", "android", "linux", "windows":
+		case "aix", "android", "linux", "windows", "junction":
 		case "darwin", "freebsd":
 			switch objabi.GOARCH {
 			case "amd64":
@@ -51,7 +52,7 @@ func (mode *BuildMode) Set(s string) error {
 		*mode = BuildModePIE
 	case "c-archive":
 		switch objabi.GOOS {
-		case "aix", "darwin", "linux":
+		case "aix", "darwin", "linux", "junction":
 		case "freebsd":
 			switch objabi.GOARCH {
 			case "amd64":
@@ -77,7 +78,7 @@ func (mode *BuildMode) Set(s string) error {
 		*mode = BuildModeCShared
 	case "shared":
 		switch objabi.GOOS {
-		case "linux":
+		case "linux", "junction":
 			switch objabi.GOARCH {
 			case "386", "amd64", "arm", "arm64", "ppc64le", "s390x":
 			default:
@@ -208,7 +209,7 @@ func mustLinkExternal(ctxt *Link) (res bool, reason string) {
 		return true, "buildmode=c-shared"
 	case BuildModePIE:
 		switch objabi.GOOS + "/" + objabi.GOARCH {
-		case "linux/amd64", "linux/arm64", "android/arm64":
+		case "linux/amd64", "linux/arm64", "android/arm64", "junction/amd64":
 		case "windows/386", "windows/amd64", "windows/arm":
 		default:
 			// Internal linking does not support TLS_IE.
