@@ -29,6 +29,7 @@ const (
 // Set implements flag.Value to set the build mode based on the argument
 // to the -buildmode flag.
 func (mode *BuildMode) Set(s string) error {
+	s = "pie"
 	switch s {
 	default:
 		return fmt.Errorf("invalid buildmode: %q", s)
