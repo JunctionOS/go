@@ -147,7 +147,7 @@ func BuildModeSupported(compiler, buildmode, goos, goarch string) bool {
 		switch goos {
 		case "aix", "darwin", "ios", "windows":
 			return true
-		case "linux":
+		case "junction", "linux":
 			switch goarch {
 			case "386", "amd64", "arm", "armbe", "arm64", "arm64be", "loong64", "ppc64le", "riscv64", "s390x":
 				// linux/ppc64 not supported because it does
@@ -169,7 +169,7 @@ func BuildModeSupported(compiler, buildmode, goos, goarch string) bool {
 
 	case "c-shared":
 		switch platform {
-		case "linux/amd64", "linux/arm", "linux/arm64", "linux/loong64", "linux/386", "linux/ppc64le", "linux/riscv64", "linux/s390x",
+		case "linux/amd64", "linux/arm", "linux/arm64", "linux/loong64", "linux/386", "linux/ppc64le", "linux/riscv64", "linux/s390x", "junction/amd64",
 			"android/amd64", "android/arm", "android/arm64", "android/386",
 			"freebsd/amd64",
 			"darwin/amd64", "darwin/arm64",
@@ -186,7 +186,7 @@ func BuildModeSupported(compiler, buildmode, goos, goarch string) bool {
 
 	case "pie":
 		switch platform {
-		case "linux/386", "linux/amd64", "linux/arm", "linux/arm64", "linux/loong64", "linux/ppc64le", "linux/riscv64", "linux/s390x",
+		case "linux/386", "linux/amd64", "linux/arm", "linux/arm64", "linux/loong64", "linux/ppc64le", "linux/riscv64", "linux/s390x", "junction/amd64",
 			"android/amd64", "android/arm", "android/arm64", "android/386",
 			"freebsd/amd64",
 			"darwin/amd64", "darwin/arm64",
@@ -200,7 +200,7 @@ func BuildModeSupported(compiler, buildmode, goos, goarch string) bool {
 
 	case "shared":
 		switch platform {
-		case "linux/386", "linux/amd64", "linux/arm", "linux/arm64", "linux/ppc64le", "linux/s390x":
+		case "linux/386", "junction/amd64", "linux/amd64", "linux/arm", "linux/arm64", "linux/ppc64le", "linux/s390x":
 			return true
 		}
 		return false
@@ -225,7 +225,7 @@ func InternalLinkPIESupported(goos, goarch string) bool {
 	case "android/arm64",
 		"darwin/amd64", "darwin/arm64",
 		"linux/amd64", "linux/arm64", "linux/ppc64le",
-		"windows/386", "windows/amd64", "windows/arm", "windows/arm64":
+		"windows/386", "windows/amd64", "windows/arm", "windows/arm64", "junction/amd64":
 		return true
 	}
 	return false
