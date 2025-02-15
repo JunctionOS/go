@@ -8,7 +8,7 @@
 // Handle that case here, by using a copy of the Accept function that
 // we used in Go 1.17.
 
-//go:build linux && arm
+//go:build (linux && arm) && !junction
 
 package syscall
 
