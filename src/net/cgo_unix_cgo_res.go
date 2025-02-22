@@ -4,7 +4,7 @@
 
 // res_search, for cgo systems where that is thread-safe.
 
-//go:build cgo && !netgo && (linux || openbsd)
+//go:build cgo && !netgo && ((linux || junction) || openbsd)
 
 package net
 
