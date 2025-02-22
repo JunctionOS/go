@@ -15,7 +15,7 @@ import (
 func init() {
 	var maxGetRandomRead int
 	switch runtime.GOOS {
-	case "linux", "android":
+	case "linux", "android", "junction":
 		// Per the manpage:
 		//     When reading from the urandom source, a maximum of 33554431 bytes
 		//     is returned by a single call to getrandom() on systems where int

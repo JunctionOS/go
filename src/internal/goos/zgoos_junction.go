@@ -4,7 +4,7 @@
 
 package goos
 
-const GOOS = `linux`
+const GOOS = `junction`
 
 const IsAix = 0
 const IsAndroid = 0
