@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-//go:build linux && arm64
-// +build linux,arm64
+//go:build (linux && arm64) && !junction
+// +build linux,arm64,!junction
 
 package cpu
 

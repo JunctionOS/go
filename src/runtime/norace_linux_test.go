@@ -4,7 +4,7 @@
 
 // The file contains tests that cannot run under race detector for some reason.
 //
-//go:build !race
+//go:build (!race) && !junction
 
 package runtime_test
 

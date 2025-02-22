@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-//go:build (linux && 386) || (linux && arm) || (linux && mips) || (linux && mipsle) || (linux && ppc)
-// +build linux,386 linux,arm linux,mips linux,mipsle linux,ppc
+//go:build ((linux && 386) || (linux && arm) || (linux && mips) || (linux && mipsle) || (linux && ppc)) && !junction
+// +build linux,386,!junction linux,arm,!junction linux,mips,!junction linux,mipsle,!junction linux,ppc,!junction
 
 package unix
 

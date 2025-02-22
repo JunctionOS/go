@@ -10,7 +10,7 @@
 // Unfortunately, on ARM accept4 wasn't added until 2.6.36, so for ARM
 // only we continue using the older code.
 
-//go:build linux && arm
+//go:build (linux || junction) && arm
 
 package poll
 

@@ -5,7 +5,7 @@
 // This file provides the Accept function used on all systems
 // other than arm. See syscall_linux_accept.go for why.
 
-//go:build linux && !arm
+//go:build (linux && !arm) && !junction
 
 package syscall
 
