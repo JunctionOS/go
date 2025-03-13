@@ -1,5 +1,5 @@
-//go:build linux
-// +build linux
+//go:build (linux || junction)
+// +build linux junction
 
 package android
 

@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-//go:build !aix && !darwin && !dragonfly && !freebsd && !linux && !netbsd && !openbsd && !solaris && !windows && !zos
-// +build !aix,!darwin,!dragonfly,!freebsd,!linux,!netbsd,!openbsd,!solaris,!windows,!zos
+//go:build !aix && !darwin && !dragonfly && !freebsd && !(linux || junction) && !netbsd && !openbsd && !solaris && !windows && !zos
+// +build !aix,!darwin,!dragonfly,!freebsd,!linux,!netbsd,!openbsd,!solaris,!windows,!zos !aix,!darwin,!dragonfly,!freebsd,!junction,!netbsd,!openbsd,!solaris,!windows,!zos
 
 package nettest
 

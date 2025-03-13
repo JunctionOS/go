@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-//go:build (linux && amd64) || (freebsd && amd64) || (linux && arm64) || (linux && ppc64le)
+//go:build ((linux || junction) && amd64) || (freebsd && amd64) || ((linux || junction) && arm64) || ((linux || junction) && ppc64le)
 
 package cgo
 
