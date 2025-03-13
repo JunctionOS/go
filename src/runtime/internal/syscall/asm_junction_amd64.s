@@ -28,12 +28,13 @@
 TEXT ·Syscall6<ABIInternal>(SB),NOSPLIT,$0
 	// a6 already in R9.
 	// a5 already in R8.
-	MOVQ	SI, R10 // a4
+	XCHGQ	SI, CX
 	MOVQ	DI, DX  // a3
-	MOVQ	CX, SI  // a2
 	MOVQ	BX, DI  // a1
 	// num already in AX.
-	SYSCALL
+	PUSHQ   AX
+	CALL (0x200e18)
+	POPQ    SI
 	CMPQ	AX, $0xfffffffffffff001
 	JLS	ok
 	NEGQ	AX

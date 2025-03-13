@@ -10,6 +10,10 @@
 // System calls for AMD64, Linux
 //
 
+#define SYSCALL \
+	CALL (0x200e18); \
+	POPQ R10;
+
 #define SYS_gettimeofday 96
 
 // func rawVforkSyscall(trap, a1 uintptr) (r1, err uintptr)
@@ -17,12 +21,12 @@ TEXT ·rawVforkSyscall(SB),NOSPLIT|NOFRAME,$0-32
 	MOVQ	a1+8(FP), DI
 	MOVQ	$0, SI
 	MOVQ	$0, DX
-	MOVQ	$0, R10
+	MOVQ	$0, CX
 	MOVQ	$0, R8
 	MOVQ	$0, R9
 	MOVQ	trap+0(FP), AX	// syscall entry
 	POPQ	R12 // preserve return address
-	SYSCALL
+	CALL (0x200e20)
 	PUSHQ	R12
 	CMPQ	AX, $0xfffffffffffff001
 	JLS	ok2
@@ -41,6 +45,7 @@ TEXT ·rawSyscallNoError(SB),NOSPLIT,$0-48
 	MOVQ	a2+16(FP), SI
 	MOVQ	a3+24(FP), DX
 	MOVQ	trap+0(FP), AX	// syscall entry
+	PUSHQ AX
 	SYSCALL
 	MOVQ	AX, r1+32(FP)
 	MOVQ	DX, r2+40(FP)
@@ -61,7 +66,7 @@ ret:
 	MOVQ	AX, err+8(FP)
 	RET
 fallback:
-	MOVL	$SYS_gettimeofday, AX
+	PUSHQ	$SYS_gettimeofday
 	SYSCALL
 	JMP ret
 ok7:
