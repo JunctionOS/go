@@ -4,7 +4,7 @@
 
 // The file contains tests that cannot run under race detector (or asan or msan) for some reason.
 //
-//go:build !race && !asan && !msan
+//go:build (!race && !asan && !msan) && !junction
 
 package runtime_test
 

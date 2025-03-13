@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-//go:build (linux && arm64) || (linux && loong64) || (linux && riscv64)
+//go:build ((linux || junction) && arm64) || ((linux || junction) && loong64) || ((linux || junction) && riscv64)
 
 package main
 
