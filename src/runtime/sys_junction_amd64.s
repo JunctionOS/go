@@ -52,9 +52,13 @@
 #define SYS_epoll_create1	291
 #define SYS_pipe2		293
 
+#define SYSCALL \
+	CALL (0x200e18); \
+	POPQ    SI;
+
 TEXT runtime·exit(SB),NOSPLIT,$0-4
 	MOVL	code+0(FP), DI
-	MOVL	$SYS_exit_group, AX
+	PUSHQ	$SYS_exit_group
 	SYSCALL
 	RET
 
@@ -64,7 +68,7 @@ TEXT runtime·exitThread(SB),NOSPLIT,$0-8
 	// We're done using the stack.
 	MOVL	$0, (AX)
 	MOVL	$0, DI	// exit code
-	MOVL	$SYS_exit, AX
+	PUSHQ	$SYS_exit
 	SYSCALL
 	// We may not even have a stack any more.
 	INT	$3
@@ -75,8 +79,8 @@ TEXT runtime·open(SB),NOSPLIT,$0-20
 	MOVL	$AT_FDCWD, DI // AT_FDCWD, so this acts like open
 	MOVQ	name+0(FP), SI
 	MOVL	mode+8(FP), DX
-	MOVL	perm+12(FP), R10
-	MOVL	$SYS_openat, AX
+	MOVL	perm+12(FP), CX
+	PUSHQ	$SYS_openat
 	SYSCALL
 	CMPQ	AX, $0xfffffffffffff001
 	JLS	2(PC)
@@ -84,9 +88,9 @@ TEXT runtime·open(SB),NOSPLIT,$0-20
 	MOVL	AX, ret+16(FP)
 	RET
 
-TEXT runtime·closefd(SB),NOSPLIT,$0-12
+TEXT runtime·closefd(SB),NOSPLIT|NOFRAME,$0-12
 	MOVL	fd+0(FP), DI
-	MOVL	$SYS_close, AX
+	PUSHQ	$SYS_close
 	SYSCALL
 	CMPQ	AX, $0xfffffffffffff001
 	JLS	2(PC)
@@ -98,7 +102,7 @@ TEXT runtime·write1(SB),NOSPLIT,$0-28
 	MOVQ	fd+0(FP), DI
 	MOVQ	p+8(FP), SI
 	MOVL	n+16(FP), DX
-	MOVL	$SYS_write, AX
+	PUSHQ	$SYS_write
 	SYSCALL
 	MOVL	AX, ret+24(FP)
 	RET
@@ -107,7 +111,7 @@ TEXT runtime·read(SB),NOSPLIT,$0-28
 	MOVL	fd+0(FP), DI
 	MOVQ	p+8(FP), SI
 	MOVL	n+16(FP), DX
-	MOVL	$SYS_read, AX
+	PUSHQ	$SYS_read
 	SYSCALL
 	MOVL	AX, ret+24(FP)
 	RET
@@ -115,7 +119,7 @@ TEXT runtime·read(SB),NOSPLIT,$0-28
 // func pipe() (r, w int32, errno int32)
 TEXT runtime·pipe(SB),NOSPLIT,$0-12
 	LEAQ	r+0(FP), DI
-	MOVL	$SYS_pipe, AX
+	PUSHQ	$SYS_pipe
 	SYSCALL
 	MOVL	AX, errno+8(FP)
 	RET
@@ -124,7 +128,7 @@ TEXT runtime·pipe(SB),NOSPLIT,$0-12
 TEXT runtime·pipe2(SB),NOSPLIT,$0-20
 	LEAQ	r+8(FP), DI
 	MOVL	flags+0(FP), SI
-	MOVL	$SYS_pipe2, AX
+	PUSHQ	$SYS_pipe2
 	SYSCALL
 	MOVL	AX, errno+16(FP)
 	RET
@@ -142,49 +146,49 @@ TEXT runtime·usleep(SB),NOSPLIT,$16
 	// nanosleep(&ts, 0)
 	MOVQ	SP, DI
 	MOVL	$0, SI
-	MOVL	$SYS_nanosleep, AX
+	PUSHQ	$SYS_nanosleep
 	SYSCALL
 	RET
 
 TEXT runtime·gettid(SB),NOSPLIT,$0-4
-	MOVL	$SYS_gettid, AX
+	PUSHQ	$SYS_gettid
 	SYSCALL
 	MOVL	AX, ret+0(FP)
 	RET
 
 TEXT runtime·raise(SB),NOSPLIT,$0
-	MOVL	$SYS_getpid, AX
+	PUSHQ	$SYS_getpid
 	SYSCALL
 	MOVL	AX, R12
-	MOVL	$SYS_gettid, AX
+	PUSHQ	$SYS_gettid
 	SYSCALL
 	MOVL	AX, SI	// arg 2 tid
 	MOVL	R12, DI	// arg 1 pid
 	MOVL	sig+0(FP), DX	// arg 3
-	MOVL	$SYS_tgkill, AX
+	PUSHQ	$SYS_tgkill
 	SYSCALL
 	RET
 
 TEXT runtime·raiseproc(SB),NOSPLIT,$0
-	MOVL	$SYS_getpid, AX
+	PUSHQ	$SYS_getpid
 	SYSCALL
 	MOVL	AX, DI	// arg 1 pid
 	MOVL	sig+0(FP), SI	// arg 2
-	MOVL	$SYS_kill, AX
+	PUSHQ	$SYS_kill
 	SYSCALL
 	RET
 
 TEXT ·getpid(SB),NOSPLIT,$0-8
-	MOVL	$SYS_getpid, AX
+	PUSHQ	$SYS_getpid
 	SYSCALL
 	MOVQ	AX, ret+0(FP)
 	RET
 
-TEXT ·tgkill(SB),NOSPLIT,$0
+TEXT ·tgkill(SB),NOSPLIT|NOFRAME,$0
 	MOVQ	tgid+0(FP), DI
 	MOVQ	tid+8(FP), SI
 	MOVQ	sig+16(FP), DX
-	MOVL	$SYS_tgkill, AX
+	PUSHQ	$SYS_tgkill
 	SYSCALL
 	RET
 
@@ -192,7 +196,7 @@ TEXT runtime·setitimer(SB),NOSPLIT,$0-24
 	MOVL	mode+0(FP), DI
 	MOVQ	new+8(FP), SI
 	MOVQ	old+16(FP), DX
-	MOVL	$SYS_setittimer, AX
+	PUSHQ	$SYS_setittimer
 	SYSCALL
 	RET
 
@@ -200,7 +204,7 @@ TEXT runtime·mincore(SB),NOSPLIT,$0-28
 	MOVQ	addr+0(FP), DI
 	MOVQ	n+8(FP), SI
 	MOVQ	dst+16(FP), DX
-	MOVL	$SYS_mincore, AX
+	PUSHQ	$SYS_mincore
 	SYSCALL
 	MOVL	AX, ret+24(FP)
 	RET
@@ -348,20 +352,20 @@ TEXT runtime·rtsigprocmask(SB),NOSPLIT,$0-28
 	MOVL	how+0(FP), DI
 	MOVQ	new+8(FP), SI
 	MOVQ	old+16(FP), DX
-	MOVL	size+24(FP), R10
-	MOVL	$SYS_rt_sigprocmask, AX
+	MOVL	size+24(FP), CX
+	PUSHQ	$SYS_rt_sigprocmask
 	SYSCALL
 	CMPQ	AX, $0xfffffffffffff001
 	JLS	2(PC)
 	MOVL	$0xf1, 0xf1  // crash
 	RET
 
-TEXT runtime·rt_sigaction(SB),NOSPLIT,$0-36
+TEXT runtime·rt_sigaction(SB),NOSPLIT|NOFRAME,$0-36
 	MOVQ	sig+0(FP), DI
 	MOVQ	new+8(FP), SI
 	MOVQ	old+16(FP), DX
-	MOVQ	size+24(FP), R10
-	MOVL	$SYS_rt_sigaction, AX
+	MOVQ	size+24(FP), CX
+	PUSHQ	$SYS_rt_sigaction
 	SYSCALL
 	MOVL	AX, ret+32(FP)
 	RET
@@ -499,19 +503,18 @@ sigtrampnog:
 // The code that cares about the precise instructions used is:
 // https://gcc.gnu.org/viewcvs/gcc/trunk/libgcc/config/i386/linux-unwind.h?revision=219188&view=markup
 TEXT runtime·sigreturn(SB),NOSPLIT,$0
-	MOVQ	$SYS_rt_sigreturn, AX
-	SYSCALL
+	JMP (0x200078)
 	INT $3	// not reached
 
 TEXT runtime·sysMmap(SB),NOSPLIT,$0
 	MOVQ	addr+0(FP), DI
 	MOVQ	n+8(FP), SI
 	MOVL	prot+16(FP), DX
-	MOVL	flags+20(FP), R10
+	MOVL	flags+20(FP), CX
 	MOVL	fd+24(FP), R8
 	MOVL	off+28(FP), R9
 
-	MOVL	$SYS_mmap, AX
+	PUSHQ	$SYS_mmap
 	SYSCALL
 	CMPQ	AX, $0xfffffffffffff001
 	JLS	ok
@@ -546,7 +549,7 @@ TEXT runtime·callCgoMmap(SB),NOSPLIT,$16
 TEXT runtime·sysMunmap(SB),NOSPLIT,$0
 	MOVQ	addr+0(FP), DI
 	MOVQ	n+8(FP), SI
-	MOVQ	$SYS_munmap, AX
+	PUSHQ	$SYS_munmap
 	SYSCALL
 	CMPQ	AX, $0xfffffffffffff001
 	JLS	2(PC)
@@ -566,11 +569,11 @@ TEXT runtime·callCgoMunmap(SB),NOSPLIT,$16-16
 	MOVQ	0(SP), SP
 	RET
 
-TEXT runtime·madvise(SB),NOSPLIT,$0
+TEXT runtime·madvise(SB),NOSPLIT|NOFRAME,$0
 	MOVQ	addr+0(FP), DI
 	MOVQ	n+8(FP), SI
 	MOVL	flags+16(FP), DX
-	MOVQ	$SYS_madvise, AX
+	PUSHQ	$SYS_madvise
 	SYSCALL
 	MOVL	AX, ret+24(FP)
 	RET
@@ -581,10 +584,10 @@ TEXT runtime·futex(SB),NOSPLIT,$0
 	MOVQ	addr+0(FP), DI
 	MOVL	op+8(FP), SI
 	MOVL	val+12(FP), DX
-	MOVQ	ts+16(FP), R10
+	MOVQ	ts+16(FP), CX
 	MOVQ	addr2+24(FP), R8
 	MOVL	val3+32(FP), R9
-	MOVL	$SYS_futex, AX
+	PUSHQ	$SYS_futex
 	SYSCALL
 	MOVL	AX, ret+40(FP)
 	RET
@@ -594,7 +597,7 @@ TEXT runtime·clone(SB),NOSPLIT,$0
 	MOVL	flags+0(FP), DI
 	MOVQ	stk+8(FP), SI
 	MOVQ	$0, DX
-	MOVQ	$0, R10
+	MOVQ	$0, CX
 
 	// Copy mp, gp, fn off parent stack for use by child.
 	// Careful: Linux system call clobbers CX and R11.
@@ -603,7 +606,7 @@ TEXT runtime·clone(SB),NOSPLIT,$0
 	MOVQ	fn+32(FP), R12
 
 	MOVL	$SYS_clone, AX
-	SYSCALL
+	CALL (0x200e20)
 
 	// In parent, return.
 	CMPQ	AX, $0
@@ -621,7 +624,7 @@ TEXT runtime·clone(SB),NOSPLIT,$0
 	JEQ	nog
 
 	// Initialize m->procid to Linux tid
-	MOVL	$SYS_gettid, AX
+	PUSHQ	$SYS_gettid
 	SYSCALL
 	MOVQ	AX, m_procid(R8)
 
@@ -641,14 +644,14 @@ nog:
 
 	// It shouldn't return. If it does, exit that thread.
 	MOVL	$111, DI
-	MOVL	$SYS_exit, AX
+	PUSHQ	$SYS_exit
 	SYSCALL
 	JMP	-3(PC)	// keep exiting
 
 TEXT runtime·sigaltstack(SB),NOSPLIT,$-8
 	MOVQ	new+0(FP), DI
 	MOVQ	old+8(FP), SI
-	MOVQ	$SYS_sigaltstack, AX
+	PUSHQ	$SYS_sigaltstack
 	SYSCALL
 	CMPQ	AX, $0xfffffffffffff001
 	JLS	2(PC)
@@ -665,7 +668,7 @@ TEXT runtime·settls(SB),NOSPLIT,$32
 #endif
 	MOVQ	DI, SI
 	MOVQ	$0x1002, DI	// ARCH_SET_FS
-	MOVQ	$SYS_arch_prctl, AX
+	PUSHQ	$SYS_arch_prctl
 	SYSCALL
 	CMPQ	AX, $0xfffffffffffff001
 	JLS	2(PC)
@@ -673,7 +676,7 @@ TEXT runtime·settls(SB),NOSPLIT,$32
 	RET
 
 TEXT runtime·osyield(SB),NOSPLIT,$0
-	MOVL	$SYS_sched_yield, AX
+	PUSHQ	$SYS_sched_yield
 	SYSCALL
 	RET
 
@@ -681,7 +684,7 @@ TEXT runtime·sched_getaffinity(SB),NOSPLIT,$0
 	MOVQ	pid+0(FP), DI
 	MOVQ	len+8(FP), SI
 	MOVQ	buf+16(FP), DX
-	MOVL	$SYS_sched_getaffinity, AX
+	PUSHQ	$SYS_sched_getaffinity
 	SYSCALL
 	MOVL	AX, ret+24(FP)
 	RET
@@ -689,7 +692,7 @@ TEXT runtime·sched_getaffinity(SB),NOSPLIT,$0
 // int32 runtime·epollcreate(int32 size);
 TEXT runtime·epollcreate(SB),NOSPLIT,$0
 	MOVL    size+0(FP), DI
-	MOVL    $SYS_epoll_create, AX
+	PUSHQ    $SYS_epoll_create
 	SYSCALL
 	MOVL	AX, ret+8(FP)
 	RET
@@ -697,7 +700,7 @@ TEXT runtime·epollcreate(SB),NOSPLIT,$0
 // int32 runtime·epollcreate1(int32 flags);
 TEXT runtime·epollcreate1(SB),NOSPLIT,$0
 	MOVL	flags+0(FP), DI
-	MOVL	$SYS_epoll_create1, AX
+	PUSHQ	$SYS_epoll_create1
 	SYSCALL
 	MOVL	AX, ret+8(FP)
 	RET
@@ -707,8 +710,8 @@ TEXT runtime·epollctl(SB),NOSPLIT,$0
 	MOVL	epfd+0(FP), DI
 	MOVL	op+4(FP), SI
 	MOVL	fd+8(FP), DX
-	MOVQ	ev+16(FP), R10
-	MOVL	$SYS_epoll_ctl, AX
+	MOVQ	ev+16(FP), CX
+	PUSHQ	$SYS_epoll_ctl
 	SYSCALL
 	MOVL	AX, ret+24(FP)
 	RET
@@ -719,9 +722,9 @@ TEXT runtime·epollwait(SB),NOSPLIT,$0
 	MOVL	epfd+0(FP), DI
 	MOVQ	ev+8(FP), SI
 	MOVL	nev+16(FP), DX
-	MOVL	timeout+20(FP), R10
+	MOVL	timeout+20(FP), CX
 	MOVQ	$0, R8
-	MOVL	$SYS_epoll_pwait, AX
+	PUSHQ	$SYS_epoll_pwait
 	SYSCALL
 	MOVL	AX, ret+24(FP)
 	RET
@@ -731,7 +734,7 @@ TEXT runtime·closeonexec(SB),NOSPLIT,$0
 	MOVL    fd+0(FP), DI  // fd
 	MOVQ    $2, SI  // F_SETFD
 	MOVQ    $1, DX  // FD_CLOEXEC
-	MOVL	$SYS_fcntl, AX
+	PUSHQ	$SYS_fcntl
 	SYSCALL
 	RET
 
@@ -740,13 +743,13 @@ TEXT runtime·setNonblock(SB),NOSPLIT,$0-4
 	MOVL    fd+0(FP), DI  // fd
 	MOVQ    $3, SI  // F_GETFL
 	MOVQ    $0, DX
-	MOVL	$SYS_fcntl, AX
+	PUSHQ	$SYS_fcntl
 	SYSCALL
 	MOVL	fd+0(FP), DI // fd
 	MOVQ	$4, SI // F_SETFL
 	MOVQ	$0x800, DX // O_NONBLOCK
 	ORL	AX, DX
-	MOVL	$SYS_fcntl, AX
+	PUSHQ	$SYS_fcntl
 	SYSCALL
 	RET
 
@@ -756,8 +759,8 @@ TEXT runtime·access(SB),NOSPLIT,$0
 	MOVL	$AT_FDCWD, DI // AT_FDCWD, so this acts like access
 	MOVQ	name+0(FP), SI
 	MOVL	mode+8(FP), DX
-	MOVL	$0, R10
-	MOVL	$SYS_faccessat, AX
+	MOVL	$0, CX
+	PUSHQ	$SYS_faccessat
 	SYSCALL
 	MOVL	AX, ret+16(FP)
 	RET
@@ -767,7 +770,7 @@ TEXT runtime·connect(SB),NOSPLIT,$0-28
 	MOVL	fd+0(FP), DI
 	MOVQ	addr+8(FP), SI
 	MOVL	len+16(FP), DX
-	MOVL	$SYS_connect, AX
+	PUSHQ	$SYS_connect
 	SYSCALL
 	MOVL	AX, ret+24(FP)
 	RET
@@ -777,7 +780,7 @@ TEXT runtime·socket(SB),NOSPLIT,$0-20
 	MOVL	domain+0(FP), DI
 	MOVL	typ+4(FP), SI
 	MOVL	prot+8(FP), DX
-	MOVL	$SYS_socket, AX
+	PUSHQ	$SYS_socket
 	SYSCALL
 	MOVL	AX, ret+16(FP)
 	RET
@@ -786,7 +789,7 @@ TEXT runtime·socket(SB),NOSPLIT,$0-20
 TEXT runtime·sbrk0(SB),NOSPLIT,$0-8
 	// Implemented as brk(NULL).
 	MOVQ	$0, DI
-	MOVL	$SYS_brk, AX
+	PUSHQ	$SYS_brk
 	SYSCALL
 	MOVQ	AX, ret+0(FP)
 	RET
@@ -794,7 +797,7 @@ TEXT runtime·sbrk0(SB),NOSPLIT,$0-8
 // func uname(utsname *new_utsname) int
 TEXT ·uname(SB),NOSPLIT,$0-16
 	MOVQ    utsname+0(FP), DI
-	MOVL    $SYS_uname, AX
+	PUSHQ    $SYS_uname
 	SYSCALL
 	MOVQ	AX, ret+8(FP)
 	RET
@@ -803,7 +806,7 @@ TEXT ·uname(SB),NOSPLIT,$0-16
 TEXT ·mlock(SB),NOSPLIT,$0-24
 	MOVQ    addr+0(FP), DI
 	MOVQ    len+8(FP), SI
-	MOVL    $SYS_mlock, AX
+	PUSHQ    $SYS_mlock
 	SYSCALL
 	MOVQ	AX, ret+16(FP)
 	RET
