@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// +build darwin dragonfly freebsd linux,!android netbsd openbsd
+// +build darwin dragonfly freebsd linux,!android junction,!android netbsd openbsd
 // +build cgo
 
 // Note that this test does not work on Solaris: issue #22849.

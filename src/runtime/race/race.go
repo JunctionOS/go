@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// +build race,linux,amd64 race,freebsd,amd64 race,netbsd,amd64 race,darwin,amd64 race,windows,amd64 race,linux,ppc64le race,linux,arm64 race,darwin,arm64
+// +build race,linux,amd64 race,junction,amd64 race,freebsd,amd64 race,netbsd,amd64 race,darwin,amd64 race,windows,amd64 race,linux,ppc64le race,junction,ppc64le race,linux,arm64 race,junction,arm64 race,darwin,arm64
 
 package race
 

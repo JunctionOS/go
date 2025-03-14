@@ -10,7 +10,7 @@
 // point.
 
 // +build amd64
-// +build linux
+// +build linux junction
 // +build !race
 
 package runtime_test

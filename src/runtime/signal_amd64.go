@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 // +build amd64
-// +build darwin dragonfly freebsd linux netbsd openbsd solaris
+// +build darwin dragonfly freebsd linux junction netbsd openbsd solaris
 
 package runtime
 

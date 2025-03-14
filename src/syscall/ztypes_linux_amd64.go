@@ -1,7 +1,8 @@
+//go:build !junction
 // Created by cgo -godefs - DO NOT EDIT
 // cgo -godefs types_linux.go
 
-// +build amd64,linux
+// +build amd64,linux,!junction
 
 package syscall
 
