@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 // +build amd64
-// +build linux
+// +build linux junction
 
 package runtime
 

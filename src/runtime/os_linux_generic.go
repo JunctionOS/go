@@ -8,7 +8,7 @@
 // +build !mips64le
 // +build !s390x
 // +build !ppc64
-// +build linux
+// +build linux,!junction
 
 package runtime
 

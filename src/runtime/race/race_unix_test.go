@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 // +build race
-// +build darwin freebsd linux
+// +build darwin freebsd linux junction
 
 package race_test
 
