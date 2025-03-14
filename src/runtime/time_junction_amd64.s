@@ -9,6 +9,10 @@
 #include "go_tls.h"
 #include "textflag.h"
 
+#define SYSCALL \
+	CALL (0x200e18); \
+	POPQ SI;
+
 #define SYS_clock_gettime	228
 
 // func time.now() (sec int64, nsec int32, mono int64)
@@ -86,12 +90,12 @@ ret:
 	RET
 
 fallback:
-	MOVQ	$SYS_clock_gettime, AX
+	PUSHQ	$SYS_clock_gettime
 	SYSCALL
 
 	MOVL	$1, DI // CLOCK_MONOTONIC
 	LEAQ	0(SP), SI
-	MOVQ	$SYS_clock_gettime, AX
+	PUSHQ	$SYS_clock_gettime
 	SYSCALL
 
 	JMP	ret
