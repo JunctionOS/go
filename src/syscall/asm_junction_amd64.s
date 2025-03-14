@@ -10,6 +10,11 @@
 // System calls for AMD64, Linux
 //
 
+#define SYSCALL \
+	PUSHQ AX; \
+	CALL (0x200e18); \
+	POPQ  SI;
+
 #define SYS_gettimeofday 96
 
 // func Syscall(trap int64, a1, a2, a3 uintptr) (r1, r2, err uintptr);
@@ -45,7 +50,7 @@ TEXT ·Syscall6(SB),NOSPLIT,$0-80
 	MOVQ	a1+8(FP), DI
 	MOVQ	a2+16(FP), SI
 	MOVQ	a3+24(FP), DX
-	MOVQ	a4+32(FP), R10
+	MOVQ	a4+32(FP), CX
 	MOVQ	a5+40(FP), R8
 	MOVQ	a6+48(FP), R9
 	MOVQ	trap+0(FP), AX	// syscall entry
@@ -90,7 +95,7 @@ TEXT ·RawSyscall6(SB),NOSPLIT,$0-80
 	MOVQ	a1+8(FP), DI
 	MOVQ	a2+16(FP), SI
 	MOVQ	a3+24(FP), DX
-	MOVQ	a4+32(FP), R10
+	MOVQ	a4+32(FP), CX
 	MOVQ	a5+40(FP), R8
 	MOVQ	a6+48(FP), R9
 	MOVQ	trap+0(FP), AX	// syscall entry
@@ -113,12 +118,12 @@ TEXT ·rawVforkSyscall(SB),NOSPLIT|NOFRAME,$0-32
 	MOVQ	a1+8(FP), DI
 	MOVQ	$0, SI
 	MOVQ	$0, DX
-	MOVQ	$0, R10
+	MOVQ	$0, CX
 	MOVQ	$0, R8
 	MOVQ	$0, R9
 	MOVQ	trap+0(FP), AX	// syscall entry
 	POPQ	R12 // preserve return address
-	SYSCALL
+	CALL (0x200e20)
 	PUSHQ	R12
 	CMPQ	AX, $0xfffffffffffff001
 	JLS	ok2
@@ -157,7 +162,7 @@ ret:
 	MOVQ	AX, err+8(FP)
 	RET
 fallback:
-	MOVL	$SYS_gettimeofday, AX
+	MOVQ	$SYS_gettimeofday, AX
 	SYSCALL
 	JMP ret
 ok7:

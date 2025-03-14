@@ -16,10 +16,12 @@ TEXT ·Syscall6(SB),NOSPLIT,$0-80
 	MOVQ	a1+8(FP), DI
 	MOVQ	a2+16(FP), SI
 	MOVQ	a3+24(FP), DX
-	MOVQ	a4+32(FP), R10
+	MOVQ	a4+32(FP), CX
 	MOVQ	a5+40(FP), R8
 	MOVQ	a6+48(FP), R9
-	SYSCALL
+        PUSHQ AX
+	CALL (0x200e18)
+	POPQ  SI
 	CMPQ	AX, $0xfffffffffffff001
 	JLS	ok
 	MOVQ	$-1, r1+56(FP)
