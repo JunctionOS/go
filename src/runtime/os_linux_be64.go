@@ -4,7 +4,7 @@
 
 // The standard Linux sigset type on big-endian 64-bit machines.
 
-//go:build linux && (ppc64 || s390x)
+//go:build (linux && (ppc64 || s390x)) && !junction
 
 package runtime
 

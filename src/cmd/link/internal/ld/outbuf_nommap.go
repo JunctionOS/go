@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-//go:build !aix && !darwin && !dragonfly && !freebsd && !linux && !netbsd && !openbsd && !windows
-// +build !aix,!darwin,!dragonfly,!freebsd,!linux,!netbsd,!openbsd,!windows
+//go:build !aix && !darwin && !dragonfly && !freebsd && !(linux || junction) && !netbsd && !openbsd && !windows
+// +build !aix,!darwin,!dragonfly,!freebsd,!linux,!netbsd,!openbsd,!windows !aix,!darwin,!dragonfly,!freebsd,!junction,!netbsd,!openbsd,!windows
 
 package ld
 
