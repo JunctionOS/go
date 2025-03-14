@@ -81,7 +81,7 @@ TEXT runtime·open(SB),NOSPLIT,$0-20
 	MOVL	$AT_FDCWD, DI // AT_FDCWD, so this acts like open
 	MOVQ	name+0(FP), SI
 	MOVL	mode+8(FP), DX
-	MOVL	perm+12(FP), R10
+	MOVL	perm+12(FP), CX
 	PUSHQ	$SYS_openat
 	SYSCALL
 	CMPQ	AX, $0xfffffffffffff001
@@ -691,7 +691,7 @@ TEXT runtime·epollctl(SB),NOSPLIT,$0
 	MOVL	epfd+0(FP), DI
 	MOVL	op+4(FP), SI
 	MOVL	fd+8(FP), DX
-	MOVQ	ev+16(FP), R10
+	MOVQ	ev+16(FP), CX
 	PUSHQ	$SYS_epoll_ctl
 	SYSCALL
 	MOVL	AX, ret+24(FP)
@@ -703,7 +703,7 @@ TEXT runtime·epollwait(SB),NOSPLIT,$0
 	MOVL	epfd+0(FP), DI
 	MOVQ	ev+8(FP), SI
 	MOVL	nev+16(FP), DX
-	MOVL	timeout+20(FP), R10
+	MOVL	timeout+20(FP), CX
 	MOVQ	$0, R8
 	PUSHQ	$SYS_epoll_pwait
 	SYSCALL
