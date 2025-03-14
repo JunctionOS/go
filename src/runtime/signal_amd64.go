@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-//go:build amd64 && (darwin || dragonfly || freebsd || linux || netbsd || openbsd || solaris)
+//go:build amd64 && (darwin || dragonfly || freebsd || (linux || junction) || netbsd || openbsd || solaris)
 // +build amd64
-// +build darwin dragonfly freebsd linux netbsd openbsd solaris
+// +build darwin dragonfly freebsd linux junction netbsd openbsd solaris
 
 package runtime
 

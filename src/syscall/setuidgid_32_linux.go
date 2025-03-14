@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-//go:build linux && (386 || arm)
-// +build linux
+//go:build (linux && (386 || arm)) && !junction
+// +build linux,!junction
 // +build 386 arm
 
 package syscall

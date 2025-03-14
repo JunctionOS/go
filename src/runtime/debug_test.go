@@ -9,8 +9,8 @@
 // spends all of its time in the race runtime, which isn't a safe
 // point.
 
-//go:build amd64 && linux && !race
-// +build amd64,linux,!race
+//go:build amd64 && (linux || junction) && !race
+// +build amd64,linux,!race amd64,junction,!race
 
 package runtime_test
 

@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-//go:build !linux || (linux && !arm64)
-// +build !linux linux,!arm64
+//go:build !(linux || junction) || ((linux || junction) && !arm64)
+// +build !linux,!junction linux,!arm64 junction,!arm64
 
 package plugin_test
 

@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-//go:build linux && ppc
-// +build linux
+//go:build (linux && ppc) && !junction
+// +build linux,!junction
 // +build ppc
 
 package unix

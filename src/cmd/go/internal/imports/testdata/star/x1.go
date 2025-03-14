@@ -1,6 +1,6 @@
 // +build blahblh
-// +build linux
-// +build !linux
+// +build linux junction
+// +build !linux,!junction
 // +build windows
 // +build darwin
 

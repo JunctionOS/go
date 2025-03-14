@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-//go:build cgo && !netgo && (android || linux || solaris)
+//go:build cgo && !netgo && (android || (linux || junction) || solaris)
 // +build cgo
 // +build !netgo
-// +build android linux solaris
+// +build android linux junction solaris
 
 package net
 

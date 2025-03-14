@@ -6,8 +6,8 @@
 // The race detector emits calls to split stack functions so it breaks
 // the test.
 
-//go:build (dragonfly || freebsd || linux) && !race
-// +build dragonfly freebsd linux
+//go:build (dragonfly || freebsd || (linux || junction)) && !race
+// +build dragonfly freebsd linux junction
 // +build !race
 
 package runtime_test
