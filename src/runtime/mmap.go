@@ -5,8 +5,8 @@
 // +build !plan9
 // +build !solaris
 // +build !windows
-// +build !linux !amd64
-// +build !linux !arm64
+// +build !linux,!junction !amd64
+// +build !linux,!junction !arm64
 // +build !js
 // +build !darwin
 // +build !aix

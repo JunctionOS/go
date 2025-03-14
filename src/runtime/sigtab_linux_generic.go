@@ -6,7 +6,7 @@
 // +build !mipsle
 // +build !mips64
 // +build !mips64le
-// +build linux
+// +build linux,!junction
 
 package runtime
 

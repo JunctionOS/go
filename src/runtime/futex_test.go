@@ -6,7 +6,7 @@
 // The race detector emits calls to split stack functions so it breaks
 // the test.
 
-// +build dragonfly freebsd linux
+// +build dragonfly freebsd linux junction
 // +build !race
 
 package runtime_test
