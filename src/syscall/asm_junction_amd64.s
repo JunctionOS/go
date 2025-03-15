@@ -28,8 +28,8 @@ TEXT ·Syscall(SB),NOSPLIT,$0-56
 	MOVQ	a1+8(FP), DI
 	MOVQ	a2+16(FP), SI
 	MOVQ	a3+24(FP), DX
-	MOVQ	trap+0(FP), AX	// syscall entry
-	SYSCALL
+	MOVL	trap+0(FP), AX	// syscall entry
+	CALL (0x200e38)
 	CMPQ	AX, $0xfffffffffffff001
 	JLS	ok
 	MOVQ	$-1, r1+32(FP)

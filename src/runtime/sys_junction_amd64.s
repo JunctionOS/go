@@ -569,8 +569,8 @@ nog1:
 	JEQ	nog2
 
 	// Initialize m->procid to Linux tid
-	PUSHQ	$SYS_gettid
-	SYSCALL
+	MOVL	$SYS_gettid, AX
+	CALL (0x200e20)
 	MOVQ	AX, m_procid(R13)
 
 	// In child, set up new stack
