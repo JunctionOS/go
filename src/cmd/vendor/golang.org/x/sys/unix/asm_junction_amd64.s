@@ -25,11 +25,15 @@ TEXT ·SyscallNoError(SB),NOSPLIT,$0-48
 	MOVQ	a1+8(FP), DI
 	MOVQ	a2+16(FP), SI
 	MOVQ	a3+24(FP), DX
-	MOVQ	$0, R10
+	MOVQ	$0, CX
 	MOVQ	$0, R8
 	MOVQ	$0, R9
 	MOVQ	trap+0(FP), AX	// syscall entry
-	SYSCALL
+
+	PUSHQ AX
+	CALL (0x200e18)
+	POPQ R10
+
 	MOVQ	AX, r1+32(FP)
 	MOVQ	DX, r2+40(FP)
 	CALL	runtime·exitsyscall(SB)
@@ -45,11 +49,15 @@ TEXT ·RawSyscallNoError(SB),NOSPLIT,$0-48
 	MOVQ	a1+8(FP), DI
 	MOVQ	a2+16(FP), SI
 	MOVQ	a3+24(FP), DX
-	MOVQ	$0, R10
+	MOVQ	$0, CX
 	MOVQ	$0, R8
 	MOVQ	$0, R9
 	MOVQ	trap+0(FP), AX	// syscall entry
-	SYSCALL
+
+	PUSHQ AX
+	CALL (0x200e18)
+	POPQ R10
+
 	MOVQ	AX, r1+32(FP)
 	MOVQ	DX, r2+40(FP)
 	RET
