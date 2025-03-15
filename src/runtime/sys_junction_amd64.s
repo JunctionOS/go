@@ -625,18 +625,18 @@ nog1:
 	// If g or m are nil, skip Go-related setup.
 	CMPQ	R13, $0    // m
 	JEQ	nog2
-	CMPQ	R9, $0    // g
+	CMPQ	R15, $0    // g
 	JEQ	nog2
 
 	// Initialize m->procid to Linux tid
 	MOVL	$SYS_gettid, AX
-	SYSCALL
+	CALL (0x200e20)
 	MOVQ	AX, m_procid(R13)
 
 	// In child, set up new stack
 	get_tls(CX)
-	MOVQ	R13, g_m(R9)
-	MOVQ	R9, g(CX)
+	MOVQ	R13, g_m(R15)
+	MOVQ	R15, g(CX)
 	CALL	runtime·stackcheck(SB)
 
 nog2:
