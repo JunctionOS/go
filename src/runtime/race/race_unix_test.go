@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-//go:build race && (darwin || freebsd || linux)
+//go:build race && (darwin || freebsd || (linux || junction))
 // +build race
-// +build darwin freebsd linux
+// +build darwin freebsd linux junction
 
 package race_test
 

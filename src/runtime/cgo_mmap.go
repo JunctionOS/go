@@ -4,8 +4,8 @@
 
 // Support for memory sanitizer. See runtime/cgo/mmap.go.
 
-//go:build (linux && amd64) || (linux && arm64)
-// +build linux,amd64 linux,arm64
+//go:build ((linux || junction) && amd64) || ((linux || junction) && arm64)
+// +build linux,amd64 junction,amd64 linux,arm64 junction,arm64
 
 package runtime
 

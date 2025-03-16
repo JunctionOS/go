@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-//go:build amd64 && linux && goexperiment.regabiargs
-// +build amd64,linux,goexperiment.regabiargs
+//go:build amd64 && (linux || junction) && goexperiment.regabiargs
+// +build amd64,linux,goexperiment.regabiargs amd64,junction,goexperiment.regabiargs
 
 package runtime
 

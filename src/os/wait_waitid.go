@@ -5,8 +5,8 @@
 // We used to used this code for Darwin, but according to issue #19314
 // waitid returns if the process is stopped, even when using WEXITED.
 
-//go:build linux
-// +build linux
+//go:build (linux || junction)
+// +build linux junction
 
 package os
 

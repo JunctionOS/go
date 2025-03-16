@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-//go:build aix || linux || solaris || zos
-// +build aix linux solaris zos
+//go:build aix || (linux || junction) || solaris || zos
+// +build aix linux junction solaris zos
 
 package term
 

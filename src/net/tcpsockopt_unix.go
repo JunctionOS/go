@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-//go:build aix || freebsd || linux || netbsd
-// +build aix freebsd linux netbsd
+//go:build aix || freebsd || (linux || junction) || netbsd
+// +build aix freebsd linux junction netbsd
 
 package net
 

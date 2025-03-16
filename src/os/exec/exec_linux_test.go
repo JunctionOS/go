@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-//go:build linux && cgo
-// +build linux,cgo
+//go:build (linux && cgo) && !junction
+// +build linux,cgo,!junction
 
 // On systems that use glibc, calling malloc can create a new arena,
 // and creating a new arena can read /sys/devices/system/cpu/online.
