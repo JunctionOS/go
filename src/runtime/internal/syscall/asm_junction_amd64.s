@@ -35,6 +35,8 @@ TEXT ·Syscall6<ABIInternal>(SB),NOSPLIT,$0
 	PUSHQ   AX
 	CALL (0x200e18)
 	POPQ    SI
+	// The Junction entry point does not preserve X15.
+	XORPS	X15, X15
 	CMPQ	AX, $0xfffffffffffff001
 	JLS	ok
 	NEGQ	AX
